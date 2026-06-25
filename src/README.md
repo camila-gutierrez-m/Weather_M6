@@ -33,4 +33,4 @@ Cambios en esta Actuaización de Versión
 En esta nueva versión se utiliza una API del clima abierta para llamar la imfromación de las cuidades dispuestas en esta pagina web. Lo que nos ayuda a entregar una imformación real dele stado del clima para nuestros usuarios.
 🚀 Instalación y uso
 Clona el repositorio:
-git clone https://github.com/camila-gutierrez-m/Weather-proyect.git
+git clone https://github.com/camila-gutierrez-m/Weather_M6.git
