@@ -1,36 +1,123 @@
-Weather Front-end M6
-📌 Propósito
-Este proyecto es una aplicación de clima, desarrollado con Vue 3, Bootstrap para estilos y diseño responsivo, y JavaScript para la interacción. Manipulación del DOM. Gestionar el proyecto con Git/GitHub (commits descriptivos, ramas y README).
+# Protafolio M7 — Mejoras de Autenticación y Estado de Usuario
 
-⚙️ Requisitos funcionales
-Listado de 5 localidades en Home con cards informativas.
-Al seleccionar localidad, navega para mostrar el pronóstico semanal.
-Diseño responsive.
-Uso de vue 3 con llamado a una API para que los imformación no este actualizada a cada momento.
-🛠️ Tecnologías utilizadas
-Vue 3.
+## Resumen
 
-Bootstrap 4.6 (npm):
+Se integró un sistema de autenticación con estado global usando **Vuex**, rutas protegidas con **Vue Router** y personalización por usuario, sin necesidad de backend externo.
 
-Grid system .
+---
 
-Utilidades . 
+## Cambios realizados
 
-Manipulación del DOM
+### 1. Instalación de Vuex
+Se instaló Vuex 4 (compatible con Vue 3) como gestor de estado global:
+```bash
+npm install vuex@4
+```
 
+---
 
-Utilización de Fetch para el llamado de la API 
-Utilización de Vue 3 para el procesamiento de los datos llamdos desde la API. 
-API del clima utilizada Open-Meteo
+### 2. Store de autenticación (`src/store/modules/auth.js`)
+Se creó un módulo Vuex que maneja el login, logout y persistencia de sesión en `localStorage`.
 
-https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m
+- Login simulado con usuarios predefinidos (sin backend)
+- Token y usuario guardados en `localStorage` para persistir la sesión al recargar
+- Getters: `isAuthenticated`, `currentUser`
 
-Git/GitHub
+**Usuarios de prueba:**
+| Email | Contraseña |
+|-------|------------|
+| camila@mail.com | 1234 |
+| test@mail.com | 1234 |
 
-Para control de versiones.`
+---
 
-Cambios en esta Actuaización de Versión
-En esta nueva versión se utiliza una API del clima abierta para llamar la imfromación de las cuidades dispuestas en esta pagina web. Lo que nos ayuda a entregar una imformación real dele stado del clima para nuestros usuarios.
+### 3. Store principal (`src/store/index.js`)
+Se configuró el store principal registrando el módulo `auth`:
+```js
+import { createStore } from 'vuex'
+import auth from './modules/auth'
+
+export default createStore({
+  modules: { auth }
+})
+```
+
+---
+
+### 4. Registro del store en la app (`src/main.js`)
+Se importó y registró el store en la instancia de Vue:
+```js
+import store from './store'
+app.use(store)
+```
+
+---
+
+### 5. Vista de Login (`src/views/LoginView.vue`)
+Se creó un formulario de login con:
+- Campos de email y contraseña
+- Mensaje de error si las credenciales son incorrectas
+- Redirección automática al Home tras login exitoso
+
+---
+
+### 6. Rutas protegidas (`src/router/index.js`)
+Se agregaron rutas nuevas y un guard de navegación global:
+
+- `/login` — Vista de login (pública)
+- `/favoritos` — Vista de favoritos (requiere autenticación)
+- `/` — Home (requiere autenticación)
+
+El guard redirige a `/login` si el usuario intenta acceder a una ruta protegida sin sesión activa:
+```js
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = store.getters['auth/isAuthenticated']
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login')
+  } else {
+    next()
+  }
+})
+```
+
+---
+
+## Estructura de archivos agregados/modificados
+
+```
+src/
+├── store/
+│   ├── index.js          ← modificado
+│   └── modules/
+│       ├── auth.js       ← nuevo
+│       └── user.js       ← nuevo
+├── views/
+│   ├── LoginView.vue     ← nuevo
+│   └── FavoritosView.vue ← nuevo
+├── router/
+│   └── index.js          ← modificado
+└── main.js               ← modificado
+```
+
+---
+
+## Flujo de autenticación
+
+```
+Usuario entra a la app
+        ↓
+¿Tiene token en localStorage?
+   ↙ No              ↘ Sí
+/login             /home (u otra ruta protegida)
+   ↓
+Ingresa credenciales
+   ↓
+¿Credenciales correctas?
+   ↙ No              ↘ Sí
+Muestra error     Guarda token + user en Vuex
+                        ↓
+                  Redirige a /home
+```
 🚀 Instalación y uso
 Clona el repositorio:
 git clone https://github.com/camila-gutierrez-m/Weather_M6.git
