@@ -4,13 +4,12 @@ import { useStore } from 'vuex'
 
 const store = useStore()
 
-// Carga los datos cuando se abre la vista
 onMounted(() => {
   store.dispatch('user/fetchFavoritos')
   store.dispatch('user/fetchPreferencias')
 })
 
-// Los usas así en el template
+
 const favoritos = computed(() => store.state.user.favoritos)
 const preferencias = computed(() => store.state.user.preferencias)
 </script>
