@@ -14,7 +14,6 @@
 
 </script>
 
-
 <style scoped>
 header {
   background-color: #9FA1FF;
