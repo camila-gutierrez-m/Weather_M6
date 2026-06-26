@@ -17,7 +17,7 @@
 
 <style scoped>
 header {
-  background-color: #35495e;
+  background-color: #9FA1FF;
   padding: 1rem;
   text-align: center;
 }
