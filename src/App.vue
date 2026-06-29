@@ -1,40 +1,37 @@
 <template>
   <header>
-    <nav>
-      <RouterLink to="/">Weather In Chile</RouterLink> |
-      
+    <nav class="d-flex justify-content-between align-items-center px-3">
+      <RouterLink to="/" class="brand">🌤️ Weather Chile</RouterLink>
+      <RouterLink to="/favoritos" class="nav-link">⭐ Favoritos</RouterLink>
     </nav>
   </header>
-
-
   <RouterView />
-  </template>
+</template>
 
 <script setup>
-
 </script>
 
 <style scoped>
 header {
   background-color: #9FA1FF;
-  padding: 1rem;
-  text-align: center;
+  padding: 0.75rem 1rem;
 }
 
-nav a {
-  color: #42b883;
+.brand {
+  color: #ffffff;
   text-decoration: none;
   font-weight: bold;
-  margin: 0 10px;
+  font-size: 1.2rem;
 }
 
-nav a.router-link-exact-active {
+.nav-link {
   color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
 }
 
-main {
-  padding: 2rem;
-  display: flex;
-  justify-content: center;
+.nav-link:hover,
+.brand:hover {
+  color: #e0e0ff;
 }
 </style>

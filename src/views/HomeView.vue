@@ -1,40 +1,34 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { ciudades } from "@/data/ciudades";
-import { useWeather } from "@/composables/useWeather";
-import CityCard from "@/components/cityCard.vue";
+import { ref, onMounted } from 'vue'
+import { ciudades } from '@/data/ciudades'
+import { useWeather } from '@/composables/useWeather'
+import CityCard from '@/components/Citycard.vue'  // fix: nombre de archivo exacto
 
-const { fetchCityWeather } = useWeather();
-
-const cities = ref([]);
-const isLoading = ref(true); 
+const { fetchCityWeather } = useWeather()
+const cities = ref([])
+const isLoading = ref(true)
 
 onMounted(async () => {
   try {
-    
-    const weatherPromises = ciudades.map(async (city) => {
-      try {
-        return await fetchCityWeather(city);
-      } catch (error) {
-        console.error(`Error cargando el clima para ${city}:`, error);
-        return null; 
-      }
-    });
-
-    const results = await Promise.all(weatherPromises);
-    
-  
-    cities.value = results.filter(city => city !== null);
-  } catch (error) {
-    console.error("Error general al cargar las ciudades:", error);
+    const results = await Promise.all(
+      ciudades.map((city) =>
+        fetchCityWeather(city).catch((e) => {
+          console.error(`Error al cargar ${city.nombre}:`, e)
+          return null
+        })
+      )
+    )
+    cities.value = results.filter(Boolean)
+  } catch (e) {
+    console.error('Error general al cargar ciudades:', e)
   } finally {
-    isLoading.value = false; 
+    isLoading.value = false
   }
-});
+})
 </script>
 
 <template>
-  <div class="row">
+  <div class="container-fluid py-4">
     <div v-if="isLoading" class="text-center my-5">
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Cargando clima...</span>
@@ -42,12 +36,10 @@ onMounted(async () => {
     </div>
 
     <template v-else>
-      <CityCard
-        v-for="city in cities"
-        :key="city.id"
-        :city="city"
-      />
-      <div v-if="cities.length === 0" class="text-center text-muted">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        <CityCard v-for="city in cities" :key="city.id" :city="city" />
+      </div>
+      <div v-if="cities.length === 0" class="text-center text-muted mt-4">
         No se pudo cargar el clima de ninguna ciudad.
       </div>
     </template>

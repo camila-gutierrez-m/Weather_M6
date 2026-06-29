@@ -1,16 +1,2 @@
-import axios from 'axios'
-
-const api = axios.create({
-  baseURL: 'https://tu-backend.com/api', 
-})
-
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-  return config
-})
-
-export default api
+// api.js - El backend externo fue eliminado junto con el login.
+// Toda la información meteorológica proviene de Open-Meteo (openMeteo.js).

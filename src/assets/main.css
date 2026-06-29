@@ -1,6 +1,11 @@
 body {
-margin: 0;
-font-family: system-ui, -apple-system, sans-serif;
-background-color: #ade8f4;
-color: #ade8f4;
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #ade8f4;
+  color: #1a1a2e; /* fix: texto visible sobre fondo celeste */
+}
+
+.row {
+  padding: 1.5rem;
+  gap: 1rem;
 }
